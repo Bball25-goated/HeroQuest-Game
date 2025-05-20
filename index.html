@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8" />
+  <title>HeroQuest: Knight Test</title>
+  <style>
+    canvas {
+      border: 2px solid black;
+      image-rendering: pixelated;
+      background-color: #222;
+    }
+  </style>
+</head>
+<body>
+  <canvas id="game" width="320" height="320"></canvas>
+
+  <script>
+    const canvas = document.getElementById("game");
+    const ctx = canvas.getContext("2d");
+
+    const tileSize = 32;
+    const mapWidth = 10;
+    const mapHeight = 10;
+
+    // Simple dungeon map: W = wall, . = floor
+    const dungeon = [
+      "WWWWWWWWWW",
+      "W........W",
+      "W.WWWWW..W",
+      "W.W...W..W",
+      "W.W.K.W..W",
+      "W.W...W..W",
+      "W.WWWWW..W",
+      "W........W",
+      "W........W",
+      "WWWWWWWWWW"
+    ];
+
+    let knightPos = { x: 4, y: 4 };
+
+    function drawTile(x, y, tile) {
+      if (tile === "W") {
+        ctx.fillStyle = "#555"; // Wall = dark gray
+      } else {
+        ctx.fillStyle = "#999"; // Floor = light gray
+      }
+      ctx.fillRect(x * tileSize, y * tileSize, tileSize, tileSize);
+    }
+
+    function drawKnight(x, y) {
+      ctx.fillStyle = "#FFD700"; // Gold
+      ctx.beginPath();
+      ctx.arc(
+        x * tileSize + tileSize / 2,
+        y * tileSize + tileSize / 2,
+        tileSize / 2.5,
+        0,
+        Math.PI * 2
+      );
+      ctx.fill();
+    }
+
+    function drawMap() {
+      for (let y = 0; y < mapHeight; y++) {
+        for (let x = 0; x < mapWidth; x++) {
+          const tile = dungeon[y][x];
+          drawTile(x, y, tile);
+        }
+      }
+
+      drawKnight(knightPos.x, knightPos.y);
+    }
+
+    function canMoveTo(x, y) {
+      if (x < 0 || y < 0 || x >= mapWidth || y >= mapHeight) return false;
+      return dungeon[y][x] !== "W";
+    }
+
+    window.addEventListener("keydown", (e) => {
+      let newX = knightPos.x;
+      let newY = knightPos.y;
+
+      if (e.key === "ArrowUp") newY--;
+      if (e.key === "ArrowDown") newY++;
+      if (e.key === "ArrowLeft") newX--;
+      if (e.key === "ArrowRight") newX++;
+
+      if (canMoveTo(newX, newY)) {
+        knightPos.x = newX;
+        knightPos.y = newY;
+        drawMap();
+      }
+    });
+
+    drawMap();
+  </script>
+</body>
+</html>
