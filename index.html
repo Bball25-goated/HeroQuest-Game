@@ -78,9 +78,11 @@
 
 let hasMoved = false;
 
+let hasMoved = false;
+
 window.addEventListener("keydown", (e) => {
-  if (e.key === " ") {
-    // End turn and reset movement
+  if (e.code === "Space") {
+    // End turn and allow moving again
     hasMoved = false;
     console.log("New turn started!");
     return;
@@ -91,10 +93,10 @@ window.addEventListener("keydown", (e) => {
   let newX = knightPos.x;
   let newY = knightPos.y;
 
-  if (e.key === "ArrowUp") newY--;
-  else if (e.key === "ArrowDown") newY++;
-  else if (e.key === "ArrowLeft") newX--;
-  else if (e.key === "ArrowRight") newX++;
+  if (e.code === "ArrowUp") newY--;
+  else if (e.code === "ArrowDown") newY++;
+  else if (e.code === "ArrowLeft") newX--;
+  else if (e.code === "ArrowRight") newX++;
   else return; // Ignore other keys
 
   if (canMoveTo(newX, newY)) {
