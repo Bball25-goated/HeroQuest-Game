@@ -76,21 +76,35 @@
       return dungeon[y][x] !== "W";
     }
 
-    window.addEventListener("keydown", (e) => {
-      let newX = knightPos.x;
-      let newY = knightPos.y;
+let hasMoved = false;
 
-      if (e.key === "ArrowUp") newY--;
-      if (e.key === "ArrowDown") newY++;
-      if (e.key === "ArrowLeft") newX--;
-      if (e.key === "ArrowRight") newX++;
+window.addEventListener("keydown", (e) => {
+  if (e.key === " ") {
+    // End turn and reset movement
+    hasMoved = false;
+    console.log("New turn started!");
+    return;
+  }
 
-      if (canMoveTo(newX, newY)) {
-        knightPos.x = newX;
-        knightPos.y = newY;
-        drawMap();
-      }
-    });
+  if (hasMoved) return; // Already moved this turn
+
+  let newX = knightPos.x;
+  let newY = knightPos.y;
+
+  if (e.key === "ArrowUp") newY--;
+  else if (e.key === "ArrowDown") newY++;
+  else if (e.key === "ArrowLeft") newX--;
+  else if (e.key === "ArrowRight") newX++;
+  else return; // Ignore other keys
+
+  if (canMoveTo(newX, newY)) {
+    knightPos.x = newX;
+    knightPos.y = newY;
+    hasMoved = true;
+    drawMap();
+  }
+});
+
 
     drawMap();
   </script>
